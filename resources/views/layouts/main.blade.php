@@ -305,6 +305,7 @@
             </aside>
             <!-- /.control-sidebar -->
         </div>
+        <!--    Modal password register-->
         <div class="modal fade" id="modal-sm-reg">
             <div class="modal-dialog">
                 <form class="modal-content" name="register">
@@ -433,6 +434,9 @@
     //     window.location = "../login";
     // }
     $info = JSON.parse(Cookies.get('info'));
+    console.log($info);
+    // $test = JSON.stringify($info);
+    // console.log($test);
     $(function(){
 
         console.log(Cookies.get('info'));
@@ -440,7 +444,7 @@
             url     :'http://45.76.153.75:403/api/checktoken',
             type    :'post',
             data    : {
-                token           : $info['token']
+                token       : $info['token']
             },
             success: function(data){
                 console.log(data.message);
@@ -455,7 +459,7 @@
     /////cick luu thay mat khau
     $("form[name=change-password]").submit(function(e) {
         e.preventDefault();
-        let checkold = 0,checknew = 0,checkconfirm = 0;
+        let checkold = 0, checknew = 0, checkconfirm = 0;
         if ($('input[name=oldpassword]').val() == ''){
             $('input[name=oldpassword]').addClass('is-invalid');
             checkold=0;
@@ -514,10 +518,13 @@
     ///// Register
     $("form[name=register]").submit(function(e) {
         e.preventDefault();
+
         $per = $('input[name=permission]:checked').val();
         $address = $('input[name=address]:checked').val();
         $fullname = $('input[name=fullnamereg]').val();
+        
         let checkold = 0,checkconfirm = 0,checkuser=0,checkfullname=0;
+
         if ($('input[name=fullnamereg]').val() == ''){
             $('input[name=fullnamereg]').addClass('is-invalid');
             checkfullname=0;
@@ -593,6 +600,7 @@
             },
             success : function(data){
                 console.log(data.message);
+               
                 if (data.message == "Đăng xuất thành công!"){
                     Cookies.remove('info');
                     window.location = origin+"/login";

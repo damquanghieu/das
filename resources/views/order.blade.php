@@ -1,279 +1,186 @@
 @extends('layouts/main',['selected' => 'news'])
 @section('title')
-    Danh sách hóa đơn
+Danh sách hóa đơn
 @endsection
 @section("css")
-    <style>
-        .text-center{
-            text-align: center;
-        }
-        table th:first-child{
-            /*border-color: white !important;*/
-            border-radius:10px 0 0 0;
-        }
+<style>
+    .text-center {
+        text-align: center;
+    }
 
-        table th:last-child{
-            border-radius:0 10px 0 0;
-            /*border-color: white !important;*/
-        }
-        .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-            background-color: #ffe4e1;
-        }
-        table tr:last-child{
-            border-radius:0 10px 0 0;
-            border-color: white !important;
-        }
-        .table thead th {
-            vertical-align: unset !important;
-            border: none !important;
-        }
-        table{
-            border-bottom: #f6546a 1px solid !important;
-        }
-        @media (min-width: 1200px){
-            .modal-xl {
-                max-width: 95%;
-            }
-        }
+    table th:first-child {
+        /*border-color: white !important;*/
+        border-radius: 10px 0 0 0;
+    }
 
-    </style>
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    table th:last-child {
+        border-radius: 0 10px 0 0;
+        /*border-color: white !important;*/
+    }
+
+    .table-hover tbody tr:hover td,
+    .table-hover tbody tr:hover th {
+        background-color: #ffe4e1;
+    }
+
+    table tr:last-child {
+        border-radius: 0 10px 0 0;
+        border-color: white !important;
+    }
+
+    .table thead th {
+        vertical-align: unset !important;
+        border: none !important;
+    }
+
+    table {
+        border-bottom: #f6546a 1px solid !important;
+    }
+
+    @media (min-width: 1200px) {
+        .modal-xl {
+            max-width: 95%;
+        }
+    }
+</style>
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
 @endsection
 @section('content')
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Thống kê</h1>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-        <!-- /.content-header -->
-        <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-                <!-- Small boxes (Stat box) -->
-                <div class="row">
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-info">
-                            <div class="inner">
-                                <h3>3</h3>
-                                <p>Đang chờ xử lý</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-bag"></i>
-                            </div>
-                            <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <h3>3<sup style="font-size: 20px">%</sup></h3>
-                                <p>Tỉ lệ đơn hoàn thành</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-stats-bars"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-warning">
-                            <div class="inner">
-                                <h3>3</h3>
-                                <p>Người dùng mới</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-person-add"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-danger">
-                            <div class="inner">
-                                <h3>3<sup style="font-size: 20px">%</sup></h3>
-                                <p>Tỉ lệ hủy hoàn thành</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-pie-graph"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                </div>
-                <!-- /.row -->
-                <!-- Main row -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header d-flex align-items-center">
-                                <h3 class="card-title float-left">Danh sách các đơn hàng</h3>
-                                <div class="col-md-2" style="left: 0;right: 0;margin: auto;">
-                                    <div class="form-group m-0">
-                                        <select class="form-control" id="checkstatusOrder">
-                                            <option value="0">Chờ khách check đơn</option>
-                                            <option value="1">Đã gửi hàng</option>
-                                            <option value="2">Đang vận chuyển</option>
-                                            <option value="3">Đã nhận</option>
-                                            <option value="4">Hủy đơn</option>
-                                            <option value="5">Đã thanh toán</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-xl-add">Thêm mới</button>
-                                </div>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                <table id="example1" class="table  table-hover">
-                                    <thead style="background-color: #f6546a;color: white" class="rounded-right">
-                                        <tr style="text-align: center">
-                                            <th class="">Tên sản phẩm(Link Order)</th>
-                                            <th >Số lượng</th>
-                                            <th>Cần mua</th>
-                                            <th>Địa chỉ ship</th>
-                                            <th>Ngày lên đơn</th>
-                                            <th>Shiper</th>
-                                            <th style="width: 95px"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                                <div style="text-align: right " class="col-md-12 d-none">
-                                    <b>Tổng tiền cần thanh toán:</b> <span class="total">#</span> $
-                                </div>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                        <!-- /.card -->
-                    </div>
-                    <!-- /.col -->
-                </div>
-                <!-- /.row (main row) -->
-            </div><!-- /.container-fluid -->
-        </section>
-        <!-- /.content -->
-    <div class="modal fade" id="modal-xl-order">
-            <div class="modal-dialog modal-md" style="max-width: 1111px !important;">
-                <form class="modal-content" name="add-category">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Chi tiết order</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label for="nation">Quốc gia</label>
-                                        <div class="custom-control custom-radio">
-                                            <input class="custom-control-input" type="radio" id="JP1" value="JP" name="nation1" />
-                                            <label for="JP1" class="custom-control-label">JP</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input class="custom-control-input" id="US1" type="radio" value="US" name="nation1" />
-                                            <label for="US1" class="custom-control-label">US</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input class="custom-control-input" id="DE1" type="radio" value="DE" name="nation1" />
-                                            <label for="US1" class="custom-control-label">US</label>
-                                        </div>
-                                    </div>
-                                    <label for="link">Link sản phẩm</label> <span class="text-danger">*</span>
-                                    <input type="text" class="form-control" disabled id="link1" name="link1"  placeholder="Link sản phẩm" required />
-                                </div>
-                                <div class="form-group">
-                                    <label for="nameProduct">Tên sản phẩm</label>
-                                    <input type="text" class="form-control" id="nameProduct1" name="nameProduct1"  placeholder="Tên sản phẩm sẽ tự load" disabled required />
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="price">Giá sản phẩm</label>
-                                            <input type="text" class="form-control" disabled id="price1" name="price1"  placeholder="Giá sản phẩm sẽ tự load" required />
-{{--                                            <input type="text" class="pay_price">--}}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="pay_price3">Giá ship</label>
-                                            <input type="text" class="form-control" disabled id="pay_price3" name="pay_price3"  placeholder="Giá sản phẩm sẽ tự load" required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="size">Size</label>
-                                            <input type="text" class="form-control" id="size1" name="size1" disabled placeholder="Size" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="quantity"> Số lượng</label> <span class="text-danger">*</span>
-                                            <input type="number" class="form-control" id="quantity1" name="quantity1"  placeholder="Số lượng" required />
-                                        </div></div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="colorProduct">Màu</label>
-                                            <input type="text" class="form-control" id="colorProduct1" disabled name="colorProduct1"  placeholder="Có thể trống" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="address_ship1">Địa chỉ ship</label> <span class="text-danger">*</span>
-                                            <input type="text" class="form-control" id="address_ship1" name="address_ship1"  placeholder="Địa chỉ ship" required />
-                                        </div>
-                                    </div>
-
-                                    <input type="hidden" id="id" />
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="position-relative divdesimg">
-                                    <img style="height: 440px" class="form-control desimg" src="../default.png" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="idShiper1">Shiper</label> <span class="text-danger">*</span>
-                                    <input type="text" class="form-control" id="idShiper1" name="idShiper1" disabled placeholder="Nếu chưa có shiper nhận sẽ thấy dòng này" />
-
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- /.row -->
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-submitedit">Sửa đơn</button>
-                    </div>
-                </form>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Thống kê</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
-    <div class="modal fade" id="modal-xl-add">
-        <div class="modal-dialog modal-lg">
-            <form class="modal-content" name="add-service">
-                @csrf
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>3</h3>
+                            <p>Đang chờ xử lý</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>3<sup style="font-size: 20px">%</sup></h3>
+                            <p>Tỉ lệ đơn hoàn thành</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>3</h3>
+                            <p>Người dùng mới</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>3<sup style="font-size: 20px">%</sup></h3>
+                            <p>Tỉ lệ hủy hoàn thành</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+            <!-- Main row -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="card-title float-left">Danh sách các đơn hàng</h3>
+                            <div class="col-md-2" style="left: 0;right: 0;margin: auto;">
+                                <div class="form-group m-0">
+                                    <select class="form-control" id="checkstatusOrder">
+                                        <option value="0">Chờ khách check đơn</option>
+                                        <option value="1">Đã gửi hàng</option>
+                                        <option value="2">Đang vận chuyển</option>
+                                        <option value="3">Đã nhận</option>
+                                        <option value="4">Hủy đơn</option>
+                                        <option value="5">Đã thanh toán</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
+                                    data-target="#modal-xl-add">Thêm mới</button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class="table  table-hover">
+                                <thead style="background-color: #f6546a;color: white" class="rounded-right">
+                                    <tr style="text-align: center">
+                                        <th class="">Tên sản phẩm(Link Order)</th>
+                                        <th>Số lượng</th>
+                                        <th>Cần mua</th>
+                                        <th>Địa chỉ ship</th>
+                                        <th>Ngày lên đơn</th>
+                                        <th>Shiper</th>
+                                        <th style="width: 95px"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div style="text-align: right " class="col-md-12 d-none">
+                                <b>Tổng tiền cần thanh toán:</b> <span class="total">#</span> $
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row (main row) -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+    <!-- /.model edit order -->
+    <div class="modal fade" id="modal-xl-order">
+        <div class="modal-dialog modal-md" style="max-width: 1111px !important;">
+            <form class="modal-content" name="add-category">
                 <div class="modal-header">
-                    <h4 class="modal-title">Tạo hóa đơn</h4>
+                    <h4 class="modal-title">Chi tiết order</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -285,130 +192,256 @@
                                 <div class="form-group">
                                     <label for="nation">Quốc gia</label>
                                     <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" type="radio" id="JP" value="JP" name="nation" />
-                                        <label for="JP" class="custom-control-label">JP (Japan)</label>
+                                        <input class="custom-control-input" type="radio" id="JP1" value="JP"
+                                            name="nation1" />
+                                        <label for="JP1" class="custom-control-label">JP</label>
                                     </div>
                                     <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" type="radio" id="US" value="US" name="nation" />
-                                        <label for="US" class="custom-control-label">US (United States)</label>
+                                        <input class="custom-control-input" id="US1" type="radio" value="US"
+                                            name="nation1" />
+                                        <label for="US1" class="custom-control-label">US</label>
                                     </div>
                                     <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" type="radio" id="GER"  value="GER" name="nation" />
-                                        <label for="GER" class="custom-control-label">GER (Germany)</label>
+                                        <input class="custom-control-input" id="DE1" type="radio" value="DE"
+                                            name="nation1" />
+                                        <label for="US1" class="custom-control-label">US</label>
                                     </div>
                                 </div>
                                 <label for="link">Link sản phẩm</label> <span class="text-danger">*</span>
-                                <input type="text" class="form-control" maxlength="255" disabled id="link" name="link"  placeholder="Link sản phẩm" required />
+                                <input type="text" class="form-control" disabled id="link1" name="link1"
+                                    placeholder="Link sản phẩm" required />
                             </div>
                             <div class="form-group">
                                 <label for="nameProduct">Tên sản phẩm</label>
-                                <input type="text" class="form-control" maxlength="255" id="nameProduct" name="nameProduct"  placeholder="Tên sản phẩm sẽ tự load" disabled required />
+                                <input type="text" class="form-control" id="nameProduct1" name="nameProduct1"
+                                    placeholder="Tên sản phẩm sẽ tự load" disabled required />
                             </div>
-                            <div class="form-group">
-                                <label for="price">Giá sản phẩm</label>
-                                <input type="number" min="0" class="form-control"  disabled id="price" name="price"  placeholder="Giá sản phẩm sẽ tự load" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="size">Size</label>
-                                <input type="text" class="form-control" maxlength="255" id="size" name="size"  placeholder="Size" />
-                            </div>
-                            <div class="form-group">
-                                <label for="quantity"> Số lượng</label> <span class="text-danger">*</span>
-                                <input type="number" class="form-control" min="1" max="20000000" id="quantity" name="quantity"  placeholder="Số lượng" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="colorProduct">Màu</label>
-                                <input type="text" class="form-control" maxlength="255" id="colorProduct" name="colorProduct"  placeholder="Màu" />
-                            </div>
-
-                        </div>
-                        <div class="col-md-8">
-                            <label for="name">Hình ảnh</label>
-                            <div class="position-relative divdesimg">
-                                <img style="height: 408px" class="form-control desimg" src="../default.png" >
-                            </div>
-                            <div class="form-group">
-                                <label for="idShiper">Shiper</label> <span class="text-danger">*</span>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <select id="inputState" class="form-control">
-                                        </select>
-                                        <input type="hidden" name="nameShip">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="price">Giá sản phẩm</label>
+                                        <input type="text" class="form-control" disabled id="price1" name="price1"
+                                            placeholder="Giá sản phẩm sẽ tự load" required />
+                                        {{--                                            <input type="text" class="pay_price">--}}
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="pay_price3">Giá ship</label>
+                                        <input type="text" class="form-control" disabled id="pay_price3"
+                                            name="pay_price3" placeholder="Giá sản phẩm sẽ tự load" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="size">Size</label>
+                                        <input type="text" class="form-control" id="size1" name="size1" disabled
+                                            placeholder="Size" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="quantity"> Số lượng</label> <span class="text-danger">*</span>
+                                        <input type="number" class="form-control" id="quantity1" name="quantity1"
+                                            placeholder="Số lượng" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="colorProduct">Màu</label>
+                                        <input type="text" class="form-control" id="colorProduct1" disabled
+                                            name="colorProduct1" placeholder="Có thể trống" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="address_ship1">Địa chỉ ship</label> <span
+                                            class="text-danger">*</span>
+                                        <input type="text" class="form-control" id="address_ship1" name="address_ship1"
+                                            placeholder="Địa chỉ ship" required />
+                                    </div>
+                                </div>
+
+                                <input type="hidden" id="id" />
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="position-relative divdesimg">
+                                <img style="height: 440px" class="form-control desimg" src="../default.png">
                             </div>
                             <div class="form-group">
-                                <label for="address_ship">Địa chỉ ship</label> <span class="text-danger">*</span>
-                                <input type="text" class="form-control" id="address_ship" name="address_ship"  placeholder="Địa chỉ ship" required />
+                                <label for="idShiper1">Shiper</label> <span class="text-danger">*</span>
+                                <input type="text" class="form-control" id="idShiper1" name="idShiper1" disabled
+                                    placeholder="Nếu chưa có shiper nhận sẽ thấy dòng này" />
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary btn-submitedit">Sửa đơn</button>
+                </div>
+            </form>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<!-- model add order -->
+<div class="modal fade" id="modal-xl-add">
+    <div class="modal-dialog modal-lg">
+        <!-- /.modal-content -->
+        <form class="modal-content" name="add-service">
+            @csrf
+            <div class="modal-header">
+                <h4 class="modal-title">Tạo hóa đơn</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="nation">Quốc gia</label>
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="JP" value="JP" name="nation" />
+                                    <label for="JP" class="custom-control-label">JP (Japan)</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="US" value="US" name="nation" />
+                                    <label for="US" class="custom-control-label">US (United States)</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="GER" value="GER"
+                                        name="nation" />
+                                    <label for="GER" class="custom-control-label">GER (Germany)</label>
+                                </div>
+                            </div>
+                            <label for="link">Link sản phẩm</label> <span class="text-danger">*</span>
+                            <input type="text" class="form-control" maxlength="255" disabled id="link" name="link"
+                                placeholder="Link sản phẩm" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="nameProduct">Tên sản phẩm</label>
+                            <input type="text" class="form-control" maxlength="255" id="nameProduct" name="nameProduct"
+                                placeholder="Tên sản phẩm sẽ tự load" disabled required />
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Giá sản phẩm</label>
+                            <input type="number" min="0" class="form-control" disabled id="price" name="price"
+                                placeholder="Giá sản phẩm sẽ tự load" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="size">Size</label>
+                            <input type="text" class="form-control" maxlength="255" id="size" name="size"
+                                placeholder="Size" />
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity"> Số lượng</label> <span class="text-danger">*</span>
+                            <input type="number" class="form-control" min="1" max="20000000" id="quantity"
+                                name="quantity" placeholder="Số lượng" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="colorProduct">Màu</label>
+                            <input type="text" class="form-control" maxlength="255" id="colorProduct"
+                                name="colorProduct" placeholder="Màu" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-8">
+                        <label for="name">Hình ảnh</label>
+                        <div class="position-relative divdesimg">
+                            <img style="height: 408px" class="form-control desimg" src="../default.png">
+                        </div>
+                        <div class="form-group">
+                            <label for="idShiper">Shiper</label> <span class="text-danger">*</span>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <select id="inputState" class="form-control">
+                                    </select>
+                                    <input type="hidden" name="nameShip">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary btn-submit">Tạo đơn</button>
-                </div>
-            </form>
-            <!-- /.modal-content -->
-        </div>
-    </div>
-        <!-- /.modal-dialog -->
-    <div class="modal fade" id="modal-xl-detail">
-        <div class="modal-dialog modal-xl">
-            <form class="modal-content" name="order-detail">
-                @csrf
-                <div class="modal-header">
-                    <h4 class="modal-title">Chi tiết hóa đơn</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Email</th>
-                                        <th>ID Order</th>
-                                        <th>Số hàng đặt được</th>
-                                        <th>TrackFedex</th>
-                                        <th>Thời gian</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
+                        <div class="form-group">
+                            <label for="address_ship">Địa chỉ ship</label> <span class="text-danger">*</span>
+                            <input type="text" class="form-control" id="address_ship" name="address_ship"
+                                placeholder="Địa chỉ ship" required />
                         </div>
                     </div>
-                    <!-- /.row -->
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-{{--                    <button type="submit" class="btn btn-primary btn-submit">Tạo đơn</button>--}}
-                </div>
-            </form>
-            <!-- /.modal-content -->
-        </div>
+                <!-- /.row -->
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary btn-submit">Tạo đơn</button>
+            </div>
+        </form>
+        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
+</div>
 
-    @endsection
+<!-- /.modal-order-detail -->
+<div class="modal fade" id="modal-xl-detail">
+    <div class="modal-dialog modal-xl">
+        <form class="modal-content" name="order-detail">
+            @csrf
+            <div class="modal-header">
+                <h4 class="modal-title">Chi tiết hóa đơn</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>ID Order</th>
+                                    <th>Số hàng đặt được</th>
+                                    <th>TrackFedex</th>
+                                    <th>Thời gian</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                {{--                    <button type="submit" class="btn btn-primary btn-submit">Tạo đơn</button>--}}
+            </div>
+        </form>
+        <!-- /.modal-content -->
+    </div>
+</div>
+<!-- /.modal-dialog -->
+
+@endsection
 @section('js')
-    <!-- DataTables -->
+<!-- DataTables -->
 
-    <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 {{--    <script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>--}}
 {{--    <script src="../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>--}}
 {{--    <script src="../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>--}}
-    <!-- Select2 -->
-    <script src="../plugins/select2/js/select2.full.min.js"></script>
-    {{--    swal--}}
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script>
-        let DT,total=0,listShip = [];
+<!-- Select2 -->
+<script src="../plugins/select2/js/select2.full.min.js"></script>
+{{--    swal--}}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    let DT,total=0,listShip = [];
         $(function () {
             if ($info.permission != 10){
                 window.location = "login";
@@ -838,6 +871,6 @@
             })
         });
 
-    </script>
+</script>
 
 @endsection

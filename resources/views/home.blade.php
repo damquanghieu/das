@@ -78,7 +78,7 @@ Danh sách hóa đơn
                                         <th>Địa chỉ ship</th>
                                         <th>Số lượng cần mua</th>
                                         <th>Ngày lên đơn</th>
-                                        <th style="width: 105px"></th>
+                                        <th style="width: 200px"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,144 +97,7 @@ Danh sách hóa đơn
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-    <div class="modal fade" id="modal-xl-order">
-        <div class="modal-dialog modal-md" style="max-width: 1000px !important;">
-            <form class="modal-content" name="add-category">
-                <div class="modal-header">
-                    <h4 class="modal-title">Chi tiết order</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label for="nation">Quốc gia</label>
-                                    <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" disabled type="radio" id="JP1" value="JP"
-                                            name="nation1">
-                                        <label for="JP1" class="custom-control-label">JP</label>
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" disabled id="US1" type="radio" value="US"
-                                            name="nation1">
-                                        <label for="US1" class="custom-control-label">US</label>
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" disabled id="GER1" type="radio" value="GER"
-                                            name="nation1">
-                                        <label for="GER1" class="custom-control-label">GER</label>
-                                    </div>
-                                </div>
-                                <label for="link">Link sản phẩm</label> <span class="text-danger">*</span>
-                                <input type="text" class="form-control" disabled id="link1" name="link1"
-                                    placeholder="Link sản phẩm" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="nameProduct">Tên sản phẩm</label>
-                                <input type="text" class="form-control" id="nameProduct1" name="nameProduct1"
-                                    placeholder="Tên sản phẩm sẽ tự load" disabled required />
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="price">Giá</label>
-                                        <input type="text" class="form-control" disabled id="price1" name="price1"
-                                            placeholder="Giá sản phẩm sẽ tự load" required />
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="size">Size</label>
-                                        <input type="text" class="form-control" id="size1" name="size1" disabled
-                                            placeholder="Size" />
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="colorProduct">Màu</label>
-                                        <input type="text" class="form-control" id="colorProduct1" disabled
-                                            name="colorProduct1" placeholder="Có thể trống" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="quantity">Số lượng</label>
-                                        <input type="text" class="form-control" id="quantity1" disabled name="quantity1"
-                                            placeholder="Số lượng" required />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="done">Đã mua</label> <span class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="done" name="done" required />
-                                    </div>
-                                </div>
 
-                                <div class="col-md-12 linkus d-none">
-                                    <div class="form-group">
-                                        <label for="colorProduct">Link check đơn hàng Adidas(US - GER)</label>
-                                        <input type="text" class="form-control" id="trackDas" name="trackDas"
-                                            placeholder="Nếu chưa có sẽ nhìn thấy dòng này" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 linkjp d-none">
-                                    <div class="form-group">
-                                        <label for="colorProduct">Link check đơn hàng Ship</label> <span
-                                            class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="trackFedex" name="trackFedex"
-                                            placeholder="Nếu chưa có sẽ nhìn thấy dòng này" />
-                                    </div>
-                                </div>
-                                <input type="hidden" id="id">
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="position-relative divdesimg">
-                                <img style="height: 440px" class="form-control desimg" src="../default.png">
-                            </div>
-                            {{--                                <div class="form-group">--}}
-                            {{--                                    <label for="idShiper1">Shiper</label> <span class="text-danger">*</span>--}}
-                            {{--                                    <input type="text" class="form-control" id="idShiper1" name="idShiper1" disabled placeholder="Nếu chưa có shiper nhận sẽ thấy dòng này" />--}}
-
-                            {{--                                </div>--}}
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="idOrder">Mã hóa đơn</label> <span class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="idOrder" name="idOrder"
-                                            placeholder="Mã hóa đơn" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="email">Email</label> <span class="text-danger">*</span>
-                                        <input type="text" class="form-control" id="email" name="email"
-                                            placeholder="Email" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="address_ship1">Địa chỉ ship</label> <span class="text-danger">*</span>
-                                <input type="text" class="form-control" id="address_ship1" disabled name="address_ship"
-                                    placeholder="Địa chỉ ship" required />
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary btn-submitedit">Sửa đơn</button>
-                </div>
-            </form>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
     <div class="modal fade" id="modal-xl-detail">
         <div class="modal-dialog modal-xl">
             <form class="modal-content" name="order-detail">
