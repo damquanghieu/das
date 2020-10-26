@@ -29,6 +29,8 @@
     <link rel="stylesheet" href="../plugins/toastr/toastr.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="{{asset('plugins/pagination/px-pagination/px-pagination.css')}}" rel="stylesheet" />
+
     @yield('css')
 </head>
 
@@ -429,6 +431,11 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Toastr -->
     <script src="../plugins/toastr/toastr.min.js"></script>
+    <!-- Paginate -->
+    <script src="{{asset('plugins/pagination/pagination.min.js')}}"></script>
+
+    <script src="{{asset('plugins/pagination/px-pagination/px-pagination.js')}}"></script>
+
     <script>
         // if (!Cookies.get('info')){
     //     window.location = "../login";

@@ -161,6 +161,16 @@ Danh sách hóa đơn
                                 <tbody>
                                 </tbody>
                             </table>
+                            {{-- <ul class="pagination pagination-sm" style="float: right;">
+                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            </ul> --}}
+                            <div class="demo" style="float:right;">
+
+                            </div>
                             <div style="text-align: right " class="col-md-12 d-none">
                                 <b>Tổng tiền cần thanh toán:</b> <span class="total">#</span> $
                             </div>
@@ -441,7 +451,7 @@ Danh sách hóa đơn
 {{--    swal--}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-    let DT,total=0,listShip = [];
+    let DT, total=0, listShip = [];
         $(function () {
             if ($info.permission != 10){
                 window.location = "login";
@@ -450,6 +460,7 @@ Danh sách hóa đơn
                 // "autoWidth": false,
                 "bSort": true,
                 "pageLength": 10,
+                "paging" : false,
                 "language": {
                     "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản",
                     "lengthMenu": "Hiển thị _MENU_ bản ghi",
@@ -461,21 +472,23 @@ Danh sách hóa đơn
                     },
                 },
             });
-            loaddon();
+            console.log(loaddon());
         });
 
         //load don
         function loaddon(){
             DT.clear().draw(true);
             $statusOrder = $('#checkstatusOrder').val();
+            page = 2;
             $.ajax({
-                url     :'http://45.76.153.75:403/api/getorderbystatus',
+                url     :'http://45.76.153.75:403/api/getorderbystatus?page='+page,
                 type    :'post',
                 data    : {
                     token :   $info['token'],
                     status:    $statusOrder
                 },
                 success : function(data){
+                    console.log(data);
                     $data = data.data;
                     console.log($data);
 
@@ -486,6 +499,7 @@ Danh sách hóa đơn
                         }else{
                             $a = "<td style=\"text-align: center\"><button type=\"button\" class=\"btn btn-sm btn-primary btn-order-detail mr-1\" data-data='"+JSON.stringify(value)+"' data-toggle=\"modal\"  data-target=\"#modal-xl-detail\"><i class=\"far fa-eye\"></i></button><input type='hidden' class='pay_price11' value='"+(value.pay_price+value.price)+"'></td>"
                         }
+                        
                         DT.row.add( [
                             value.nameProduct+"<br>"+"<a href='"+value.linkOrder+"'>"+value.linkOrder+"</td>",
                             "<div style='text-align: center'>"+value.quantity+"</div>",
@@ -494,14 +508,42 @@ Danh sách hóa đơn
                             value.data_order,
                             ""+value.nameShiper+"",
                             $a,
+                           
                         ] ).draw( false );
                     });
+                   
+                    
+                    console.log(data.meta.totalPage);
+                    totalPage = data.meta.totalPage;
+                    $(".demo").pxpaginate({
+                    currentpage: 1,
+                    totalPageCount: totalPage,
+                    maxBtnCount: 3,
+                    nextPrevBtnShow: true,
+                    firstLastBtnShow: true,
+                    prevPageName: '<',
+                    nextPageName: '>',
+                    lastPageName: '<<',
+                    firstPageName: '>>',
+                    callback: function(pagenumber){ 
+                        page = pagenumber;
+                        console.log(page); 
+                       
+                    }
+                    });
+                    
+                    
                 },
                 error   : function(){
                     toastr["error"]("Lỗi");
                 }
+                
             })
+           
         }
+        $('.page-item').on('click', function(){
+            alert('ok');
+        });
         $('#example1').on('search.dt', function() {
                 $.each($(".pay_price11"),function(){
                     total += parseFloat($(this).val());
@@ -775,7 +817,7 @@ Danh sách hóa đơn
                                 })
                                     .then((value) => {
                                         switch (value) {
-                                            case "ok": location.reload();
+                                            case "ok": DB.load();
                                         }
                                     },"success");
                             },
