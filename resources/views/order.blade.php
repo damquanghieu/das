@@ -42,6 +42,14 @@ Danh sách hóa đơn
             max-width: 95%;
         }
     }
+
+    .dataTables_filter input {
+        border: 1px solid black;
+        border-radius: 3px;
+        padding: 5px;
+        background-color: transparent;
+        margin-left: 3px;
+    }
 </style>
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
 @endsection
@@ -140,10 +148,11 @@ Danh sách hóa đơn
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
-                                    data-target="#modal-xl-add">Thêm mới</button>
+                                <button type="button" id="model-add-order" class="btn btn-success btn-sm float-right"
+                                    data-toggle="modal" data-target="#modal-xl-add">Thêm mới</button>
                             </div>
                         </div>
+                        <modal-body></modal-body>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example1" class="table  table-hover">
@@ -168,7 +177,7 @@ Danh sách hóa đơn
                                 <li class="page-item"><a class="page-link" href="#">3</a></li>
                                 <li class="page-item"><a class="page-link" href="#">Next</a></li>
                             </ul> --}}
-                            <div class="demo" style="float:right;">
+                            <div class="demo" id="custom-paginate" style="float:right;">
 
                             </div>
                             <div style="text-align: right " class="col-md-12 d-none">
@@ -368,7 +377,7 @@ Danh sách hóa đơn
                         <div class="position-relative divdesimg">
                             <img style="height: 408px" class="form-control desimg" src="../default.png">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="margin-top: 25px;">
                             <label for="idShiper">Shiper</label> <span class="text-danger">*</span>
                             <div class="row">
                                 <div class="col-md-12">
@@ -476,10 +485,12 @@ Danh sách hóa đơn
         });
 
         //load don
-        function loaddon(){
+        function loaddon(page){
             DT.clear().draw(true);
             $statusOrder = $('#checkstatusOrder').val();
-            page = 2;
+            if (page == null) {
+                 page = 1;
+            }
             $.ajax({
                 url     :'http://45.76.153.75:403/api/getorderbystatus?page='+page,
                 type    :'post',
@@ -491,6 +502,7 @@ Danh sách hóa đơn
                     console.log(data);
                     $data = data.data;
                     console.log($data);
+                    console.log(DT);
 
                     $.each($data, function( index, value ) {
                         $a = "";
@@ -515,10 +527,11 @@ Danh sách hóa đơn
                     
                     console.log(data.meta.totalPage);
                     totalPage = data.meta.totalPage;
+                  
                     $(".demo").pxpaginate({
-                    currentpage: 1,
+                    currentpage: page,
                     totalPageCount: totalPage,
-                    maxBtnCount: 3,
+                    maxBtnCount: 2,
                     nextPrevBtnShow: true,
                     firstLastBtnShow: true,
                     prevPageName: '<',
@@ -527,12 +540,12 @@ Danh sách hóa đơn
                     firstPageName: '>>',
                     callback: function(pagenumber){ 
                         page = pagenumber;
-                        console.log(page); 
-                       
+                        loaddon(page);
                     }
                     });
-                    
-                    
+
+                    totalOrder = data.meta.totalOrder;
+                    $('#example1_info').html("Hiển thị 1 đến 10 của "+ totalOrder + " bản")
                 },
                 error   : function(){
                     toastr["error"]("Lỗi");
@@ -541,9 +554,6 @@ Danh sách hóa đơn
             })
            
         }
-        $('.page-item').on('click', function(){
-            alert('ok');
-        });
         $('#example1').on('search.dt', function() {
                 $.each($(".pay_price11"),function(){
                     total += parseFloat($(this).val());
@@ -730,6 +740,7 @@ Danh sách hóa đơn
         //submit them
         $(".btn-submit").click(function(e){
             e.preventDefault();
+            DT = $("#example1").DataTable();
             $soluong = $("input[name=quantity]").val();
             if($soluong < 1){
                 toastr['error']("Số lượng phải lớn hơn 0");
@@ -775,11 +786,13 @@ Danh sách hóa đơn
                     })
                         .then((value) => {
                             switch (value) {
-                                case "ok": location.reload();
+                                case "ok": loaddon();
+
                             }
+                            $('#modal-xl-add').modal('hide');
                         });
                 },
-                error   : function(data){
+                error  : function(data){
                     let value = JSON.parse(JSON.stringify(data));
                     console.log(value.responseJSON.message);
                     toastr["error"](value.responseJSON.message);
@@ -789,12 +802,16 @@ Danh sách hóa đơn
         //cancel order
         $(document).on('click','.btn-cancelorder',function(){
             $id = $(this).data('data')._id;
+            page  = $('#custom-paginate').children('.selected').text();
+
+            //console.log($page);
+           // console.log($('.px-btn').prop('selected', true));
             swal({
                 title: "Cảnh báo?",
                 text: "Bạn có chắc sẽ cancel order này!",
                 icon: "warning",
                 buttons: true,
-                dangerMode: true,
+                dangerMode: true,   
             })
                 .then((willDelete) => {
                     if (willDelete) {
@@ -817,7 +834,7 @@ Danh sách hóa đơn
                                 })
                                     .then((value) => {
                                         switch (value) {
-                                            case "ok": DB.load();
+                                            case "ok": loaddon(page);
                                         }
                                     },"success");
                             },
@@ -831,6 +848,7 @@ Danh sách hóa đơn
                     }
                 });
         })
+        
         //btn--order edit
         $(document).on('click','.btn-order',function(){
             $data = $(this).data('data');
