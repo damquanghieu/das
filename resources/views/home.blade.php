@@ -179,11 +179,11 @@ Danh sách hóa đơn
         function loaddon() {
             total = 0;
             $.ajax({
-                url: 'http://45.76.153.75:403/api/getorderbystatus',
+                url: 'http://45.76.153.75:403/api/getorderbyaccount',
                 type: 'post',
                 data: {
-                    token: $info['token'],
-                    status: 0
+                    token : $info['token'],
+                   _id    : $info['_id'],
                 },
                 success: function (data) {
                     $data = data.data;

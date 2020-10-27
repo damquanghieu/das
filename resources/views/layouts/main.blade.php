@@ -446,7 +446,7 @@
     // console.log($test);
     $(function(){
 
-        console.log(Cookies.get('info'));
+        //  console.log(Cookies.get('info'));
         $.ajax({
             url     :'http://45.76.153.75:403/api/checktoken',
             type    :'post',
@@ -571,6 +571,7 @@
             $user           =   $('input[name=usernamereg]').val();
             $password    =   $('input[name=confirmpasswordreg]').val();
             $token          =   $info['token'];
+            
             $.ajax({
                 url     :'http://45.76.153.75:403/api/reg',
                 type    :'post',
@@ -580,7 +581,8 @@
                     password        : $password,
                     token           : $token,
                     permission      : $per,
-                    address         : $address
+                    address         : $address,
+                    nation         : $address
                 },
                 success : function(data){
                     console.log(data);

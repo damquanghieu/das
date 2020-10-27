@@ -481,16 +481,19 @@ Danh sách hóa đơn
                     },
                 },
             });
-            console.log(loaddon());
+            loaddon();
         });
 
         //load don
         function loaddon(page){
+           
             DT.clear().draw(true);
             $statusOrder = $('#checkstatusOrder').val();
             if (page == null) {
                  page = 1;
+                 console.log(page);
             }
+            console.log(page);
             $.ajax({
                 url     :'http://45.76.153.75:403/api/getorderbystatus?page='+page,
                 type    :'post',
@@ -502,7 +505,7 @@ Danh sách hóa đơn
                     console.log(data);
                     $data = data.data;
                     console.log($data);
-                    console.log(DT);
+                    //console.log(DT);
 
                     $.each($data, function( index, value ) {
                         $a = "";
@@ -531,9 +534,9 @@ Danh sách hóa đơn
                     $(".demo").pxpaginate({
                     currentpage: page,
                     totalPageCount: totalPage,
-                    maxBtnCount: 2,
-                    nextPrevBtnShow: true,
-                    firstLastBtnShow: true,
+                    maxBtnCount: 7,
+                    nextPrevBtnShow: false,
+                    firstLastBtnShow: false,
                     prevPageName: '<',
                     nextPageName: '>',
                     lastPageName: '<<',
@@ -541,6 +544,7 @@ Danh sách hóa đơn
                     callback: function(pagenumber){ 
                         page = pagenumber;
                         loaddon(page);
+                        // console.log(page);
                     }
                     });
 
@@ -677,6 +681,7 @@ Danh sách hóa đơn
                             nation:   "JP"
                         },
                         success : function(data){
+                            console.log(data);
                             $shiper = "";
                             $.each(data.data, function (key,value) {
                                 $shiper += "<option value='"+value._id+"'>" + value.full_name+"</option>";

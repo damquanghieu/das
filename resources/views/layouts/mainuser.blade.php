@@ -433,8 +433,10 @@
             }
         })
     })
-
+  
     $info = JSON.parse(Cookies.get('info'));
+    console.log($info);
+    console.log($info._id);
     $('.name-admin').text($info.full_name);
     $('.avatar').attr('src',$info.avatar);
     /////cick luu thay mat khau
