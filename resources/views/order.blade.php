@@ -177,8 +177,10 @@ Danh sách hóa đơn
                                 <li class="page-item"><a class="page-link" href="#">3</a></li>
                                 <li class="page-item"><a class="page-link" href="#">Next</a></li>
                             </ul> --}}
-                            <div class="demo" id="custom-paginate" style="float:right;">
+                            <div class="demo" style="float:right;">
+                                <ul id="custom-paginate" class="pagination-sm">
 
+                                </ul>
                             </div>
                             <div style="text-align: right " class="col-md-12 d-none">
                                 <b>Tổng tiền cần thanh toán:</b> <span class="total">#</span> $
@@ -482,6 +484,7 @@ Danh sách hóa đơn
                 },
             });
             loaddon();
+
         });
 
         //load don
@@ -493,7 +496,7 @@ Danh sách hóa đơn
                  page = 1;
                  console.log(page);
             }
-            console.log(page);
+            //console.log(page);
             $.ajax({
                 url     :'http://45.76.153.75:403/api/getorderbystatus?page='+page,
                 type    :'post',
@@ -528,25 +531,36 @@ Danh sách hóa đơn
                     });
                    
                     
-                    console.log(data.meta.totalPage);
+                   // console.log(data.meta.totalPage);
                     totalPage = data.meta.totalPage;
-                  
-                    $(".demo").pxpaginate({
-                    currentpage: page,
-                    totalPageCount: totalPage,
-                    maxBtnCount: 7,
-                    nextPrevBtnShow: false,
-                    firstLastBtnShow: false,
-                    prevPageName: '<',
-                    nextPageName: '>',
-                    lastPageName: '<<',
-                    firstPageName: '>>',
-                    callback: function(pagenumber){ 
-                        page = pagenumber;
-                        loaddon(page);
-                        // console.log(page);
-                    }
+                    $("#custom-paginate").twbsPagination({ 
+                        totalPages: totalPage,
+                        visiblePages: 5,
+                        first: 'Đầu',
+                        prev: '<<',
+                        next: '>>',
+                        last: 'Cuối',
                     });
+                                
+            
+
+                    // $("#custom-paginate").pxpaginate({
+                    // currentpage: page,
+                    // totalPageCount: totalPage,
+                    // maxBtnCount: 7,
+                    // nextPrevBtnShow: false,
+                    // firstLastBtnShow: false,
+                    // prevPageName: '<',
+                    // nextPageName: '>',
+                    // lastPageName: '<<',
+                    // firstPageName: '>>',
+                    // callback: function(pagenumber){ 
+                    //     page = pagenumber;
+                    //     console.log(page);
+                    //     loaddon(pagenumber);
+                    //     // console.log(page);
+                    // }
+                    // });
 
                     totalOrder = data.meta.totalOrder;
                     $('#example1_info').html("Hiển thị 1 đến 10 của "+ totalOrder + " bản")
@@ -558,6 +572,18 @@ Danh sách hóa đơn
             })
            
         }
+        // $("#custom-paginate").on("click",".page-item", function() {
+        //     alert("success");
+        // });
+        $(document).on('click', '.page-item', function(){
+            console.log($(this).children('a').text());
+            //page = $(this).children('a').text();
+            page = $('#custom-paginate').find('.active').children('a').text();
+            loaddon(page);
+            
+        });
+             
+
         $('#example1').on('search.dt', function() {
                 $.each($(".pay_price11"),function(){
                     total += parseFloat($(this).val());

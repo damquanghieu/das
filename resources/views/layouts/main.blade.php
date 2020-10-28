@@ -434,8 +434,9 @@
     <!-- Paginate -->
     <script src="{{asset('plugins/pagination/pagination.min.js')}}"></script>
 
-    <script src="{{asset('plugins/pagination/px-pagination/px-pagination.js')}}"></script>
-
+    {{-- <script src="{{asset('plugins/pagination/px-pagination/px-pagination.js')}}"></script> --}}
+    {{-- <script src="{{asset('plugins/pagination/paginate2/paginathing.js')}}"></script> --}}
+    <script src="{{asset('plugins/pagination/paginate_simple/jquery.twbsPagination.js')}}"></script>
     <script>
         // if (!Cookies.get('info')){
     //     window.location = "../login";
