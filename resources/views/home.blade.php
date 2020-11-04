@@ -136,6 +136,61 @@ Danh sách hóa đơn
             <!-- /.modal-content -->
         </div>
     </div>
+    <div class="modal fade" id="modal-xl-oder">
+        <div class="modal-dialog">
+            <form style="line-height: 50px;" class="modal-content form-group" name="order-detail">
+                @csrf
+                <div class="modal-header">
+                    <h4 class="modal-title">Số lượng đặt được</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{-- <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>ID Order</th>
+                                        <th>Số hàng đặt được</th>
+                                        <th>TrackFedex</th>
+                                        <th>Thời gian</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table> --}}
+                            <input type="hidden" value="" name="token">
+                            <input type="hidden" value="" name="idOrders_mother">
+                           
+                            <label for="idOrder">idOrder</label>
+                            <input id="idOrder" class="form-control" type="text" name="idOrder">
+                            
+                            <label for="order_quantity">order_quantity</label>
+                            <input id="order_quantity" class="form-control" type="text" name="order_quantity">
+
+                            <label for="trackDas">trackDas</label>
+                            <input id="trackDas" class="form-control" type="text" name="trackDas">
+                            <label for="trackFedex">trackFedex</label>
+                            <input id="trackFedex" class="form-control" type="text" name="trackFedex">
+                            <label for="email">Email</label>
+                            <input id="email" class="form-control" type="email" name="email">
+                            <input style="margin-top: 20px; float:right;" class="btn btn-primary" type="submit" value="Update">
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    {{--                    <button type="submit" class="btn btn-primary btn-submit">Tạo đơn</button>--}}
+                </div>
+            </form>
+            <!-- /.modal-content -->
+        </div>
+    </div>
+ 
     <!-- /.modal-dialog -->
 </div>
 
@@ -214,31 +269,66 @@ Danh sách hóa đơn
         }
 
         $(document).on('click', '.btn-order', function () {
-            $(".linkjp").addClass("d-none");
-            $(".linkus").addClass("d-none");
+            // $(".linkjp").addClass("d-none");
+            // $(".linkus").addClass("d-none");
+            // $data = $(this).data('data');
+            // $("input[name=link1]").val($data.linkOrder);
+            // $("input[name=nameProduct1]").val($data.nameProduct);
+            // $("input[name=price1]").val($data.price);
+            // $("input[name=size1]").val($data.size);
+            // $("input[name=quantity1]").val($data.realquantity);
+            // $("input[name=colorProduct1]").val($data.colorProduct);
+            // $("input[name=trackDas]").val($data.trackDas);
+            // $("input[name=trackFedex]").val($data.trackFedex);
+            // $("input[name=idShiper1]").val($data.nameShiper);
+            // $("#address_ship1").val($data.address_ship);
+            // $("input[name=nation1][value=" + $data.nation + "]").attr('checked', 'checked');
+            // $("input[name=nation1][value=" + $data.nation + "]").attr('disabled', false);
+            // $(".desimg").attr("src", $data.image);
+            // $("#id").val($data._id);
+            // $("input[name=idOrder]").val($data.idOrder);
+            // $("input[name=email]").val($data.email);
+            // if ($data.nation == "JP") {
+            //     $(".linkjp").removeClass("d-none");
+            // } else if ($data.nation == "US" || $data.nation == "GER") {
+            //     $(".linkjp").removeClass("d-none");
+            //     $(".linkus").removeClass("d-none");
+            // }
+            $("input[name=idOrders_mother]").val($data._id);
+            $("input[name=token]").val($info.token);
+            //  console.log($("input[name=idOrders_mother]").val());
+            // console.log($("input[name=idOrders_mother]").val());
+            $('#modal-xl-oder').modal('show')
+            
+            //console.log($info.token);
+           
             $data = $(this).data('data');
-            $("input[name=link1]").val($data.linkOrder);
-            $("input[name=nameProduct1]").val($data.nameProduct);
-            $("input[name=price1]").val($data.price);
-            $("input[name=size1]").val($data.size);
-            $("input[name=quantity1]").val($data.realquantity);
-            $("input[name=colorProduct1]").val($data.colorProduct);
-            $("input[name=trackDas]").val($data.trackDas);
-            $("input[name=trackFedex]").val($data.trackFedex);
-            $("input[name=idShiper1]").val($data.nameShiper);
-            $("#address_ship1").val($data.address_ship);
-            $("input[name=nation1][value=" + $data.nation + "]").attr('checked', 'checked');
-            $("input[name=nation1][value=" + $data.nation + "]").attr('disabled', false);
-            $(".desimg").attr("src", $data.image);
-            $("#id").val($data._id);
-            $("input[name=idOrder]").val($data.idOrder);
-            $("input[name=email]").val($data.email);
-            if ($data.nation == "JP") {
-                $(".linkjp").removeClass("d-none");
-            } else if ($data.nation == "US" || $data.nation == "GER") {
-                $(".linkjp").removeClass("d-none");
-                $(".linkus").removeClass("d-none");
-            }
+           
+            
+            // $.ajax({
+            //     url: "http://45.76.153.75:403/api/getbyidorder",
+            //     type: "post",
+            //     data: {
+            //         token: $info['token'],
+            //         idOrders_mother: $data._id
+            //     }
+            //     , success: function (data) {
+            //         $child = (data.data_child);
+            //         // console.log($child);
+            //         $a = "";
+            //         $.each($child, function (key, value) {
+            //             $a += "<tr>\n" +
+            //                 "                                        <td>" + value.email + "</td>\n" +
+            //                 "                                        <td>" + value.idOrder + "</td>\n" +
+            //                 "                                        <td>" + value.order_quantity + "</td>\n" +
+            //                 "                                        <td> <a href=" + value.trackFedex + ">" + value.trackFedex + "</td>\n" +
+            //                 "                                        <td> " + value.data_order + "</td>\n" +
+            //                 "                                    </tr>";
+            //         });
+            //         $("#modal-xl-edit tbody tr").remove();
+            //         $("#modal-xl-edit tbody").append($a);
+            //     }
+            // })
         });
         $("#done").keyup(function () {
             $task = parseInt($("#quantity1").val());
@@ -250,6 +340,46 @@ Danh sách hóa đơn
                 $(this).removeClass("is-invalid");
                 check = 1;
             }
+        });
+        //order-detail
+        $("form[name='order-detail']").submit(function (e) {
+            e.preventDefault();
+           // console.log($(this).serialize());
+            token = $("input[name=token]").val();
+            idOrders_mother = $("input[name=idOrders_mother]").val();
+            order_quantity = $("input[name=order_quantity]").val();
+            idOrder = $("input[name=idOrder]").val();
+            trackDas = $("input[name=trackDas]").val();
+            trackFedex = $("input[name=trackFedex]").val();
+            email = $("input[name=email]").val();
+
+            console.log(token);
+            console.log(idOrders_mother);
+            console.log(order_quantity);
+            console.log(idOrder);
+            console.log(trackDas);
+            console.log(trackFedex);
+            console.log(email);
+            
+
+
+            $.ajax({
+                url: "http://45.76.153.75:403/api/childorder",
+                type: "post",
+                data: {
+                    token: $info['token'],
+                    idOrders_mother: idOrders_mother,
+                    order_quantity : order_quantity,
+                    idOrder : idOrder,
+                    trackDas : trackDas,
+                    trackFedex : trackFedex,
+                    email : email,
+                }
+                , success: function (data) {
+                    console.log(data);
+                }
+            })
+            
         });
         $(".btn-submitedit").click(function (e) {
             e.preventDefault();
