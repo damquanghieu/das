@@ -220,11 +220,11 @@
 
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
-            All rights reserved.
+            <strong>Copyright &copy;</strong>
+            {{-- All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
                 <b>Version</b> 3.0.4
-            </div>
+            </div> --}}
         </footer>
         <!--    Modal password change-->
         <!--    modal-->
@@ -414,6 +414,8 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Toastr -->
     <script src="../plugins/toastr/toastr.min.js"></script>
+    {{-- paginate --}}
+    <script src="{{asset('plugins/pagination/paginate_simple/jquery.twbsPagination.js')}}"></script>
     <script>
         $(function(){
         if (!$info['token']){

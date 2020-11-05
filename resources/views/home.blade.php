@@ -86,6 +86,11 @@ Danh sách hóa đơn
                                 </tbody>
 
                             </table>
+                            <div class="demo" style="float:right;">
+                                <ul id="custom-paginate" class="pagination-sm">
+
+                                </ul>
+                            </div>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -136,9 +141,9 @@ Danh sách hóa đơn
             <!-- /.modal-content -->
         </div>
     </div>
-    <div class="modal fade" id="modal-xl-oder">
+    <div class="modal fade" id="modal-xl-order">
         <div class="modal-dialog">
-            <form style="line-height: 50px;" class="modal-content form-group" name="order-detail">
+            <form style="line-height: 40px;" class="modal-content form-group" name="order-detail">
                 @csrf
                 <div class="modal-header">
                     <h4 class="modal-title">Số lượng đặt được</h4>
@@ -164,12 +169,12 @@ Danh sách hóa đơn
                             </table> --}}
                             <input type="hidden" value="" name="token">
                             <input type="hidden" value="" name="idOrders_mother">
-                           
-                            <label for="idOrder">idOrder</label>
+
+                            <label for="idOrder">Id Order</label>
                             <input id="idOrder" class="form-control" type="text" name="idOrder">
-                            
-                            <label for="order_quantity">order_quantity</label>
-                            <input id="order_quantity" class="form-control" type="text" name="order_quantity">
+
+                            <label for="order_quantity">Số hàng đặt được</label>
+                            <input id="order_quantity" class="form-control" type="number" name="order_quantity">
 
                             <label for="trackDas">trackDas</label>
                             <input id="trackDas" class="form-control" type="text" name="trackDas">
@@ -177,20 +182,22 @@ Danh sách hóa đơn
                             <input id="trackFedex" class="form-control" type="text" name="trackFedex">
                             <label for="email">Email</label>
                             <input id="email" class="form-control" type="email" name="email">
-                            <input style="margin-top: 20px; float:right;" class="btn btn-primary" type="submit" value="Update">
+                           
                         </div>
                     </div>
                     <!-- /.row -->
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input style="padding: none; float:right;" class="btn btn-primary" type="submit"
+                    value="Update">
                     {{--                    <button type="submit" class="btn btn-primary btn-submit">Tạo đơn</button>--}}
                 </div>
             </form>
             <!-- /.modal-content -->
         </div>
     </div>
- 
+
     <!-- /.modal-dialog -->
 </div>
 
@@ -215,6 +222,7 @@ Danh sách hóa đơn
                 "autoWidth": false,
                 "bSort": false,
                 "pageLength": 10,
+                "paging" : false,
                 "language": {
                     "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản",
                     "lengthMenu": "Hiển thị _MENU_ bản ghi",
@@ -231,8 +239,13 @@ Danh sách hóa đơn
         });
 
         //load don
-        function loaddon() {
+        function loaddon(page) {
             total = 0;
+            if (page == null) {
+                 page = 1;
+                 console.log(page);
+            }
+            DT.clear().draw(true);
             $.ajax({
                 url: 'http://45.76.153.75:403/api/getorderbyaccount',
                 type: 'post',
@@ -259,6 +272,15 @@ Danh sách hóa đơn
                             $temp,
                         ]).draw(false);
                     });
+                    totalPage = data.meta.totalPage;
+                    $("#custom-paginate").twbsPagination({ 
+                        totalPages: totalPage,
+                        visiblePages: 5,
+                        first: 'Đầu',
+                        prev: '<<',
+                        next: '>>',
+                        last: 'Cuối',
+                    });
                     console.log("a" + total);
                     // toastr["success"](data.message);
                 },
@@ -267,6 +289,14 @@ Danh sách hóa đơn
                 }
             })
         }
+        //load paginate
+        $(document).on('click', '.page-item', function(){
+            console.log($(this).children('a').text());
+            //page = $(this).children('a').text();
+            page = $('#custom-paginate').find('.active').children('a').text();
+            loaddon(page);
+            
+        });
 
         $(document).on('click', '.btn-order', function () {
             // $(".linkjp").addClass("d-none");
@@ -294,15 +324,13 @@ Danh sách hóa đơn
             //     $(".linkjp").removeClass("d-none");
             //     $(".linkus").removeClass("d-none");
             // }
+            $data = $(this).data('data');
             $("input[name=idOrders_mother]").val($data._id);
             $("input[name=token]").val($info.token);
-            //  console.log($("input[name=idOrders_mother]").val());
-            // console.log($("input[name=idOrders_mother]").val());
-            $('#modal-xl-oder').modal('show')
+            //$('#modal-xl-oder').modal('show');
             
-            //console.log($info.token);
            
-            $data = $(this).data('data');
+           
            
             
             // $.ajax({
@@ -344,7 +372,7 @@ Danh sách hóa đơn
         //order-detail
         $("form[name='order-detail']").submit(function (e) {
             e.preventDefault();
-           // console.log($(this).serialize());
+           //console.log($(this).serialize());
             token = $("input[name=token]").val();
             idOrders_mother = $("input[name=idOrders_mother]").val();
             order_quantity = $("input[name=order_quantity]").val();
@@ -360,13 +388,12 @@ Danh sách hóa đơn
             console.log(trackDas);
             console.log(trackFedex);
             console.log(email);
-            
-
 
             $.ajax({
                 url: "http://45.76.153.75:403/api/childorder",
                 type: "post",
-                data: {
+                data:
+                {
                     token: $info['token'],
                     idOrders_mother: idOrders_mother,
                     order_quantity : order_quantity,
@@ -376,11 +403,20 @@ Danh sách hóa đơn
                     email : email,
                 }
                 , success: function (data) {
+                    page = $('#custom-paginate').find('.active').children('a').text();
+                    loaddon(page);
+                    $('#modal-xl-order').modal('hide');
+                    toastr["success"](data.message);
+                   
+                },
+                error: function (data) {
                     console.log(data);
+                    toastr["error"](data.responseJSON.message);
                 }
             })
             
         });
+        //edit order
         $(".btn-submitedit").click(function (e) {
             e.preventDefault();
             $trackDas = $("input[name=trackDas]").val();

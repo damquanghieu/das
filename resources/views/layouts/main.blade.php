@@ -233,11 +233,7 @@
 
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
-            All rights reserved.
-            <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.0.4
-            </div>
+            <strong>Copyright</strong>
         </footer>
         <!--    Modal password change-->
         <!--    modal-->
@@ -518,7 +514,14 @@
                         icon: "success",
                         button: "Ok!",
                     });
-                    $('#modal-sm-pass').hide();
+                    
+                    $("form[name=change-password]").find('.is-valid').removeClass('is-valid');
+                    $("form[name=change-password]").trigger('reset');
+                    $('#modal-sm-pass').modal('hide');
+                }, 
+                error: function (data) {
+                    console.log(data);
+                    toastr['error'](data.responseJSON.message);
                 }
             })
         }
@@ -593,8 +596,13 @@
                         icon: "success",
                         button: "Ok!",
                     });
-                    $('#modal-sm-register').hide();
-
+                    $('form[name=register]').find('.is-valid').removeClass('is-valid');
+                    $('form[name=register]').trigger('reset');
+                    $('#modal-sm-reg').modal('hide');
+                   
+                },
+                error: function (data) {
+                   console.log('ok');
                 }
             })
         }

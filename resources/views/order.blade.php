@@ -821,6 +821,8 @@ Danh sách hóa đơn
 
                             }
                             $('#modal-xl-add').modal('hide');
+                            $('form[name=add-service]').trigger('reset');
+                            
                         });
                 },
                 error  : function(data){
